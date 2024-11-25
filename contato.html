@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimalix - Página de Contato</title>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="imagens/favicon.png" type="image/x-icon">
+    <!-- CSS Externo -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <script>
+        // Função para buscar o endereço pela API do ViaCEP
+        function buscarCEP() {
+            const cep = document.getElementById('cep').value.replace(/\D/g, ''); // Remove caracteres não numéricos
+            const status = document.getElementById('status');
+
+            // Valida o CEP
+            if (cep.length === 8) {
+                status.textContent = 'Buscando endereço...';
+
+                // Faz a requisição para a API ViaCEP
+                fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                    .then(response => {
+                        if (!response.ok) throw new Error('Erro na consulta do CEP');
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.erro) {
+                            throw new Error('CEP não encontrado');
+                        }
+
+                        // Preenche os campos com os dados retornados
+                        document.getElementById('endereco').value = data.logradouro || '';
+                        document.getElementById('bairro').value = data.bairro || '';
+                        document.getElementById('cidade').value = data.localidade || '';
+                        document.getElementById('estado').value = data.uf || '';
+                        status.textContent = 'Endereço encontrado!';
+                    })
+                    .catch(error => {
+                        status.textContent = error.message;
+                    });
+            } else {
+                status.textContent = 'CEP inválido.';
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <header>
+        <div class="limitador">
+            <!-- Logotipo -->
+            <h1><a href="index.html" title="Página inicial">Minimalix</a></h1>
+            <nav>
+                <ul class="menu">
+                    <li><a href="index.html" title="página inicial">Home
+                        </a></li>
+                    <li><a href="produtos.html" title="conheça nossos produtos">Produtos</a></li>
+                    <li><a href="servicos.html"
+                            title="da criação de site a loja virtual, conheça nossos serviços">serviços</a></li>
+                    <li><a href="contato.html" title="Fale com a equipe">Contato</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <section class="limitador conteudo">
+            <h2>Contato</h2>
+
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur voluptas ducimus earum exercitationem, voluptate laudantium?</p>
+
+            <!-- formulario -->
+            <form action="https://formspree.io/f/myzydvya" method="post" id="my-form">
+                <div>
+                    <label for="nome">Nome:</label>
+                    <input type="text" name="nome" id="nome" required>
+                </div>
+                <div>
+                    <label for="email">E-mail:</label>
+                    <input type="email" name="email" id="email">
+                </div>
+                <div>
+                    <label for="data">Data de nascimento:</label>
+                    <input type="date" name="data" id="data">
+                </div>
+                <div>
+                    <label for="telefone">Telefone</label>
+                    <input type="tel" name="telefone" id="email" placeholder="Digite apenas números, incluindo o DDD">
+                </div>
+                <div>
+                    <label for="documento">CPF ou CNPJ</label>
+                    <input type="tel" name="documento" id="documento">
+                </div>
+                <div>
+                    <label for="idade">Idade</label>
+                    <input type="number" name="idade" id="idade" min="18" max="120">
+                </div>
+
+                <div>
+                    <p>Gênero:</p>
+                    
+                    <input type="radio" name="genero" id="masculino" value="masculino">
+                    <label for="masculino">Masculino</label>
+
+                    <input type="radio" name="genero" id="feminino" value="feminino">
+                    <label for="feminino">Feminino</label>
+
+                    <input type="radio" name="genero" id="outros" value="outros">
+                    <label for="outros">Outros</label>
+                </div>
+
+                <div>
+                    <p>Interesses</p>
+                    <input type="checkbox" name="interesses" id="design" value="design">
+                    <label for="masculino">Design</label>
+
+                    <input type="checkbox" name="interesses" id="marketing" value="marketing">
+                    <label for="marketing">Marketing</label>
+
+                    <input type="checkbox" name="interesses" id="programacao" value="programacao">
+                    <label for="outros">Programação</label>
+                </div>
+
+                <div>
+                    <label for="cep">CEP:</label>
+                    <input type="text" name="cep" id="cep" maxlength="9" onblur="buscarCEP()" required>
+                    <b id="status"></b>
+                </div>
+
+                <div>
+                    <label for="endereco">Endereço</label>
+                    <input type="text" name="endereco" id="endereco" size="30">
+                </div>
+
+                <div>
+                    <label for="bairro">Bairro</label>
+                    <input type="text" name="bairro" id="bairro">
+                </div>
+
+                <div>
+                    <label for="cidade">Cidade</label>
+                    <input type="text" name="cidade" id="cidade">
+                </div>
+
+                <div>
+                    <label for="estado">Estado:</label>
+                    <input type="text" name="estado" id="estado">
+                </div>
+
+                <button type="submit">Enviar dados</button>
+            </form>
+        </section>
+    </main>
+
+    <!-- footer -->
+     <footer>
+        <p>Site fictício desenvolvido para fins didáticos &copy; | Alguns Direitos Reservados | 2024</p>
+     </footer>
+</body>
+
+</html>
